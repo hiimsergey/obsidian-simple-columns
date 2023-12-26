@@ -24,6 +24,9 @@ export default class Osc extends Plugin {
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000))
 	}
 
+	// TODO idk if i need to keep it or not
+	onunload() {}
+
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
 	}
