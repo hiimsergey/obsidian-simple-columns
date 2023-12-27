@@ -52,6 +52,28 @@ column two
 [end]
 ```
 
+You can also declare blocks in other blocks for further division:
+
+```markdown
+this text takes up the whole width
+
+[begin]
+this text takes up the first half
+
+[begin]
+this text takes up the first quarter
+
+[col]
+this text takes up the second quarter
+
+[end]
+
+[col]
+this text takes up the second half
+
+[end]
+```
+
 ### Custom width ratio
 Some columns can take up more space that the others. Just add a number after a tag:
 
