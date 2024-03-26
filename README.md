@@ -101,3 +101,4 @@ This is useful if you access a synced vault from the desktop on narrow screens.
 
 # Coming soon (eventually)
 - Apply columns in exported PDFs (right now they look like the normal document)
+- delete unnecessary elements from the DOM (technical issue, no change in user experience)

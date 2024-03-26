@@ -14,9 +14,9 @@ const DEFAULT_SETTINGS: SimpleColumnsSettings = {
 
 // See `this.getElementAction()` function
 enum ElementAction {
-	Move,	// = merge the content of this element with the next one
-	Render,	// = rewrite the innerHTML of this element to display the text side-by-side
-	Skip	// = move to the next element because this one has invalid syntax
+	Move,	// = merge this element with the next one
+	Render,	// = change the innerHTML of this element to display the text side-by-side
+	Skip	// = move to the next element because this one has invalid block column syntax
 }
 
 export default class SimpleColumns extends Plugin {
@@ -40,8 +40,8 @@ export default class SimpleColumns extends Plugin {
 			// Splits columns by their `[col]` tags
 			.split(/<p>\[col\].*?<\/p>/)
 			.map((block, i) =>
-				// Readds the line breaks that were removes at the start of the function
-				`<div style="flex:${widths[i]}">${block.replace("</p><p>", "<br>")}</div>`
+				// Readds the line breaks that were removed at the start of the function
+				`<div style="flex:${widths[i]}">${block.replace(/<\/p><p>/g, "<br>")}</div>`
 			)
 		
 		// Applies wrap setting by adding the `column-wrap` class
@@ -55,7 +55,7 @@ export default class SimpleColumns extends Plugin {
 	}
 
 	/**
-	 * Return the block settings (`rtl`/`ltr` and/or `wrap`) set by the user
+	 * Returns the block settings (`rtl`/`ltr` and/or `wrap`) set by the user
 	 * @param html the innerHTML of the to-be-processed column block
 	 * @returns the string of text written behind the `[end]` tag by the user
 	 */
@@ -90,19 +90,19 @@ export default class SimpleColumns extends Plugin {
 
 		text.split("\n").forEach(line => {
 			if (line.startsWith("[begin]")) {
-				// Element has two `[begin]` tags, syntax error
+				// Element has two `[begin]` tags -> syntax error
 				if (hasBeginTag) return ElementAction.Skip
 				hasBeginTag = true
 			}
 			if (line.startsWith("[end]")) {
-				// Element has two `[end]` tags, syntax error
+				// Element has two `[end]` tags -> syntax error
 				if (hasEndTag) return ElementAction.Skip
 				hasEndTag = true
 			}
 		})
 
 		if (hasBeginTag) {
-			// Element has one `[begin]` tag and one `[end]` tag, valid column block
+			// Element has one `[begin]` tag and one `[end]` tag -> valid column block
 			if (hasEndTag) return ElementAction.Render
 			// Element lacks the corresponding `[end]` tag
 			return ElementAction.Move
@@ -119,7 +119,7 @@ export default class SimpleColumns extends Plugin {
 		// A variable storing the content of previously processed element
 		let prevEl = { innerHTML: "" } as HTMLElement
 
-		// Rerenders the Reading View so the columns stay up-to-date
+		// Rerenders the Reading View each time you change the view
 		this.registerEvent(this.app.workspace.on("layout-change", () => {
 			this.app.workspace
 				.getActiveViewOfType(MarkdownView)?.previewMode
@@ -128,8 +128,8 @@ export default class SimpleColumns extends Plugin {
 
 		// The Markdown post processor divides the rendered text into fragments of the
 		// same Markdown syntax element type, e.g. headings, lists, tables, etc. In that
-		// callback lambda, `el` refers to the HTMLElement object of one fragment. Thus,
-		// the callback runs multiple times for every fragment of the note.
+		// callback, `el` refers to the HTMLElement object of one fragment. Thus, the
+		// callback runs multiple times for every fragment of the note.
 		this.registerMarkdownPostProcessor(el => {
 			// Merges the content of the previous element with the current one
 			el.innerHTML = `${prevEl.innerHTML}\n${el.innerHTML}`

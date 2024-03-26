@@ -9,7 +9,7 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Sergey Lavrent",
 	"license": "GPL-3.0-only",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
