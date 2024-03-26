@@ -160,6 +160,13 @@ export default class SimpleColumns extends Plugin {
 			}
 		})
 	}
+	
+	// Rerenders the Reading View again after disabling plugin
+	onunload() {
+		this.app.workspace
+			.getActiveViewOfType(MarkdownView)?.previewMode
+			.rerender(true)
+	}
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
