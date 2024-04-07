@@ -12,7 +12,7 @@ const DEFAULT_SETTINGS: SimpleColumnsSettings = {
 	renderOnMobile: true
 }
 
-// See `this.getElementAction()` function
+// See `SimpleColumns.getElementAction()`
 enum ElementAction {
 	Move,	// = merge this element with the next one
 	Render,	// = change the innerHTML of this element to display the text side-by-side
