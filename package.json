@@ -1,6 +1,6 @@
 {
 	"name": "simple-columns",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "Display your text side-by-side with a simple syntax.",
 	"main": "main.js",
 	"scripts": {
@@ -13,8 +13,6 @@
 	"license": "GPL-3.0-only",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
 		"obsidian": "latest",

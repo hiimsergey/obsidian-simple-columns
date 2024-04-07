@@ -36,9 +36,9 @@ export default class SimpleColumns extends Plugin {
 
 		let blocks = html
 			// Removes the `[begin]` and `[end]` tags
-			.replace(/<p>\[(begin|end)\].*?<\/p>/g, "")
+			.replace(/<p>\n?\[(begin|end)\].*?<\/p>/g, "")
 			// Splits columns by their `[col]` tags
-			.split(/<p>\[col\].*?<\/p>/)
+			.split(/<p>\n?\[col\].*?<\/p>/)
 			.map((block, i) =>
 				// Readds the line breaks that were removed at the start of the function
 				`<div style="flex:${widths[i]}">${block.replace(/<\/p><p>/g, "<br>")}</div>`
