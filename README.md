@@ -18,7 +18,7 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 ...
 ```
 
-TODO insert image here
+![screenshot](example_1.png)
 
 - Between `[begin]` and `[end]` should be the text you want to be displayed in columns.
     - Everything before `[begin]` and after `[end]` is processed normally.
@@ -40,7 +40,7 @@ TODO insert image here
 [end] rtl
 ```
 
-TODO image here
+![screenshot](example_2.png)
 
 By appending `rtl` to the `[end]` tag of your block, the columns will be put side-by-side in reversed order.
 
@@ -68,7 +68,7 @@ You can configure to have blocks processed like that by default by enabling the 
 [end] wrap
 ```
 
-TODO image here
+![screenshot](example_3.png)
 
 By appending `wrap` to the `[end]` tag of your block, the columns won't be strictly displayed on one level and can wrap over to the next one if you have too many blocks. Their individual widths won't sink below 40%.
 
@@ -90,7 +90,7 @@ column thrice as wide, like really wide
 [end] rtl wrap
 ```
 
-TODO image here
+![screenshot](example_4.png)
 
 By appending a number to a `[begin]` or `[col]` tag, you set the width ratio of your blocks. The three blocks in the example above will be processed with the width ratio of 1:2:3.
 
