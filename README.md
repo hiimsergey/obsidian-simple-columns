@@ -87,7 +87,7 @@ column twice as wide
 [col] 3
 column thrice as wide, like really wide
 
-[end] rtl wrap
+[end]
 ```
 
 ![screenshot](example_4.png)
