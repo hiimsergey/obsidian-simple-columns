@@ -185,7 +185,7 @@ class SimpleColumnsSettingTab extends PluginSettingTab {
 		this.plugin = plugin
 	}
 
-	display(): void {
+	display() {
 		const { containerEl } = this
 
 		containerEl.empty()
