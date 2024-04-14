@@ -114,7 +114,7 @@ export default class SimpleColumns extends Plugin {
 	async onload() {
 		await this.loadSettings()
 
-		this.addSettingTab(new SimpleColumnsSettingTab(this.app, this))
+		this.addSettingTab(new SimpleColumnsSettingTab(this))
 
 		// A variable storing the content of previously processed element
 		let prevEl = { innerHTML: "" } as HTMLElement
@@ -180,8 +180,8 @@ export default class SimpleColumns extends Plugin {
 class SimpleColumnsSettingTab extends PluginSettingTab {
 	plugin: SimpleColumns
 
-	constructor(app: App, plugin: SimpleColumns) {
-		super(app, plugin)
+	constructor(plugin: SimpleColumns) {
+		super(plugin.app, plugin)
 		this.plugin = plugin
 	}
 
