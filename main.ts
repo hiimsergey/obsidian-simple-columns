@@ -49,7 +49,7 @@ export default class SimpleColumns extends Plugin {
 			(Platform.isDesktop || this.settings.renderOnMobile)
 			&& (this.settings.wrapByDefault || config.contains("wrap"))
 		) blocks = blocks.map(block =>
-			block.replace(/div/, "div class=\"osc-wrap\""))
+			block.replace(/div/, `div class="osc-wrap"`))
 
 		return blocks.join("")
 	}
