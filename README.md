@@ -4,7 +4,7 @@ Display your text side-by-side with a simple syntax.
 This plugin provides a way to structure your notes into columns that can be displayed horizontally in both directions with custom width ratios in the Reading View.
 
 ## Installation
-1. Download the archive from [Releases](https://github.com/hiimsergey/obsidian-simple-columns/releases/latest) and extract it to `path/to/vault/.obsidian/plugins/`.
+1. Download the zip or tar archive from [Releases](https://github.com/hiimsergey/obsidian-simple-columns/releases/latest) and extract it to `path/to/vault/.obsidian/plugins/`.
 2. Restart Obsidian.
 3. Enable it under **Settings > Community Plugins > Simple Columns**.
 
