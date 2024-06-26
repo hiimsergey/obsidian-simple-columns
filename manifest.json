@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-simple-columns",
+	"id": "simple-columns",
 	"name": "Simple Columns",
 	"version": "0.0.1",
 	"minAppVersion": "0.15.0",
-	"description": "Display text side-by-side using a simple column syntax",
-	"author": "hiimsergey",
+	"description": "Display your text side-by-side with a simple syntax.",
+	"author": "Sergey Lavrent",
 	"authorUrl": "https://github.com/hiimsergey",
 	"isDesktopOnly": false
 }

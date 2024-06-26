@@ -1,8 +1,29 @@
-/*
+.osc-parent {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Prevents text from exceeding width limit */
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.osc-parent-rtl {
+    flex-direction: row-reverse;
+}
 
-If your plugin does not need CSS, delete this file.
+.osc-wrap {
+    flex: 1 1 40%;
+    min-width: 40%;
+}
 
-*/
+/* Modifies the top margin of headings to make them look appropriate at the start of
+columns
+'div[style*="flex"]' refers to divs of the block columns. */
+div[style*="flex"] > :is(h1,h2,h3,h4,h5,h6):first-child {
+    margin-top: var(--p-spacing);
+}
+
+/* Restores the default display to make PDF look normal
+Right now, I don't know a way to make PDFs show blocks side-by-side, sorry. */
+@media print {
+    .osc-parent {
+        display: block;
+    }
+}
