@@ -23,7 +23,8 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 ...
 ```
 
-![screenshot](example_1.png)
+![example_1](https://github.com/hiimsergey/obsidian-simple-columns/assets/91432388/8979df0d-ecfd-4fcc-90a6-065140e1969b)
+
 
 - Between `[begin]` and `[end]` should be the text you want to be displayed in columns.
     - Everything before `[begin]` and after `[end]` is processed normally.
@@ -45,7 +46,7 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 [end] rtl
 ```
 
-![screenshot](example_2.png)
+![example_2](https://github.com/hiimsergey/obsidian-simple-columns/assets/91432388/c9e6287e-ff42-429b-8f5b-1d2d42eb1350)
 
 By appending `rtl` to the `[end]` tag of your block, the columns will be put side-by-side in reversed order.
 
@@ -73,7 +74,7 @@ You can configure to have blocks processed like that by default by enabling the 
 [end] wrap
 ```
 
-![screenshot](example_3.png)
+![example_3](https://github.com/hiimsergey/obsidian-simple-columns/assets/91432388/32ac7100-8d5e-4185-b0b3-f199c54e80ac)
 
 By appending `wrap` to the `[end]` tag of your block, the columns won't be strictly displayed on one level and can wrap over to the next one if you have too many blocks. Their individual widths won't sink below 40%.
 
@@ -95,7 +96,8 @@ column thrice as wide, like really wide
 [end]
 ```
 
-![screenshot](example_4.png)
+![example_4](https://github.com/hiimsergey/obsidian-simple-columns/assets/91432388/f4e4d8b3-a343-4d1e-a0d7-9c8a58ab2de6)
+
 
 By appending a number to a `[begin]` or `[col]` tag, you set the width ratio of your blocks. The three blocks in the example above will be processed with the width ratio of 1:2:3.
 
