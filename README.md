@@ -49,9 +49,11 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 
 By appending `rtl` to the `[end]` tag of your block, the columns will be put side-by-side in reversed order.
 
-This is useful if your language is written right-to-left.
+This is useful if your language is written right-to-left, like Arabic or Hebrew.
 
-You can configure to have blocks processed like that by default by enabling the **RTL by default** setting. To process the blocks left-to-right, simply write `ltr` after the `[end]` tag. *Note: The setting will come into effect after switching into Reading View again.*
+You can configure to have blocks processed like that by default by enabling the **RTL by default** setting. To process the blocks left-to-right, simply write `ltr` after the `[end]` tag.
+
+*Note: The setting will come into effect after switching into Reading View again.*
 
 ## Wrap columns
 ```md
@@ -79,7 +81,9 @@ By appending `wrap` to the `[end]` tag of your block, the columns won't be stric
 
 That way you don't have to write countless `[begin]`-`[end]`-pairs if you want to write your text in a kind of grid.
 
-You can make this the default behavior by enabling the **Wrap blocks by default** setting. *Note: The setting will come into effect after switching into Reading View again.*
+You can make this the default behavior by enabling the **Wrap blocks by default** setting.
+
+*Note: The setting will come into effect after switching into Reading View again.*
 
 ## Resize columns
 ```md
@@ -104,6 +108,6 @@ You can prevent block rendering on mobile devices by disabling the **Render bloc
 
 This is useful if you access a synced vault from the desktop on narrow screens.
 
-# Coming soon (eventually)
+# Coming soon (maybe)
 - Apply columns in exported PDFs (right now they look like the normal document)
-- delete unnecessary elements from the DOM (technical issue, no change in user experience)
+- Delete unnecessary elements from the DOM (technical issue, no change in user experience)
