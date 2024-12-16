@@ -23,8 +23,7 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 ...
 ```
 
-![example_1](example_1.png)
-
+![example_1](https://github.com/user-attachments/assets/396773ca-4a45-412a-8276-0156c44f0604)
 
 - Between `[begin]` and `[end]` should be the text you want to be displayed in columns.
     - Everything before `[begin]` and after `[end]` is processed normally.
@@ -46,7 +45,7 @@ _Lorem ipsum_ is typically a corrupted version of _De finibus bonorum et malor
 [end] rtl
 ```
 
-![example_2](example_2.png)
+![example_2](https://github.com/user-attachments/assets/32b6ded5-246c-4663-87ab-cbf027d8f8f3)
 
 By appending `rtl` to the `[end]` tag of your block, the columns will be put side-by-side in reversed order.
 
@@ -74,7 +73,7 @@ You can configure to have blocks processed like that by default by enabling the 
 [end] wrap
 ```
 
-![example_3](example_3.png)
+![example_3](https://github.com/user-attachments/assets/9c58087e-171a-49fc-b16c-bf98f2931fb3)
 
 By appending `wrap` to the `[end]` tag of your block, the columns won't be strictly displayed on one level and can wrap over to the next one if you have too many blocks. Their individual widths won't sink below 40%.
 
@@ -96,8 +95,7 @@ column thrice as wide, like really wide
 [end]
 ```
 
-![example_4](example_4.png)
-
+![example_4](https://github.com/user-attachments/assets/67149c40-e28c-4edc-96e0-62cf99310f08)
 
 By appending a number to a `[begin]` or `[col]` tag, you set the width ratio of your blocks. The three blocks in the example above will be processed with the width ratio of 1:2:3.
 
