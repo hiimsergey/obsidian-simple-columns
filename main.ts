@@ -1,4 +1,4 @@
-import { App, MarkdownView, Platform, Plugin, PluginSettingTab, Setting } from "obsidian"
+import { MarkdownView, Platform, Plugin, PluginSettingTab, Setting } from "obsidian"
 
 interface SimpleColumnsSettings {
 	rtlByDefault: boolean,
@@ -15,7 +15,7 @@ const DEFAULT_SETTINGS: SimpleColumnsSettings = {
 // See `SimpleColumns.getElementAction()`
 enum ElementAction {
 	Move,	// = merge this element with the next one
-	Render,	// = change the innerHTML of this element to display the text side-by-side
+	Render,	// = alter this element to display the text side-by-side
 	Skip	// = move to the next element because this one has invalid block column syntax
 }
 
@@ -23,54 +23,75 @@ export default class SimpleColumns extends Plugin {
 	settings: SimpleColumnsSettings
 
 	/**
-	 * Creates the HTML string of the column block
-	 * @param html the innerHTML of the to-be-processed column block element
+	 * Create the HTML string of the column block
+	 * @param el to-be-processed column block element
 	 * @param config the string of text written behind the `[end]` tag by the user
-	 * @returns a HTML string of the column block
 	 */
-	getBlockColumns (html: string, config: string): string {
-		// Removes line breaks in paragraph text to faciliate further manipulations
-		html = html.replace(/<br>/g, "</p><p>")
+	getBlockColumns (el: HTMLElement, config: string) {
+		// Remove line breaks in paragraph text to faciliate further manipulations
+        this.removeBreaks(el)
+		const widths = this.getBlockWidths(el.innerText)
 
-		const widths = this.getBlockWidths(html)
+        let blocks: HTMLElement[] = [document.createDiv()]
+        blocks[0].style.flex = widths[0]
 
-		let blocks = html
-			// Removes the `[begin]` and `[end]` tags
-			.replace(/<p>\n?\[(begin|end)\].*?<\/p>/g, "")
-			// Splits columns by their `[col]` tags
-			.split(/<p>\n?\[col\].*?<\/p>/)
-			.map((block, i) =>
-				// Readds the line breaks that were removed at the start of the function
-				`<div style="flex:${widths[i]}">${block.replace(/<\/p><p>/g, "<br>")}</div>`
-			)
-		
-		// Applies wrap setting by adding the `column-wrap` class
-		if (
-			(Platform.isDesktop || this.settings.renderOnMobile)
-			&& (this.settings.wrapByDefault || config.contains("wrap"))
-		) blocks = blocks.map(block =>
-			block.replace(/div/, `div class="osc-wrap"`))
+        let prevP: Element|null = null
+        for (const child of Array.from(el.children)) {
+            if (child.tagName === "P") {
+                if (child.textContent?.match(/^\n?\[(begin|end)\]/)) {
+                    child.remove()
+                    continue
+                }
 
-		return blocks.join("")
+                if (child.textContent?.match(/^\n?\[col\]/)) {
+                    blocks.push(document.createDiv())
+                    blocks[blocks.length - 1].style.flex = widths[blocks.length - 1]
+                    continue
+                }
+
+                if (prevP) {
+                    prevP.append(
+                        document.createElement("br"),
+                        ...Array.from(child.children)
+                    )
+                    child.remove()
+                    continue
+                }
+
+                prevP = child
+                continue
+            }
+
+            prevP = null
+            blocks[blocks.length - 1].appendChild(child)
+        }
+
+		// Apply wrap setting by adding the `column-wrap` class
+		if ((Platform.isDesktop || this.settings.renderOnMobile) &&
+            (this.settings.wrapByDefault || config.contains("wrap")))
+            blocks.forEach(block => block.classList.add("osc-wrap"))
+
+        while (el.children.length > 0) el.firstChild?.remove()
+        el.append(...blocks)
 	}
 
 	/**
-	 * Returns the block settings (`rtl`/`ltr` and/or `wrap`) set by the user
-	 * @param html the innerHTML of the to-be-processed column block
-	 * @returns the string of text written behind the `[end]` tag by the user
+	 * Return the block settings (`rtl`/`ltr` and/or `wrap`) set by the user
+	 * @param html to-be-processed column block
+	 * @returns string of text written behind the `[end]` tag by the user
 	 */
 	getBlockConfig(html: string): string {
-		const endTagMatch = html.match(/\[end\](.*?)<\/p>/)
+		const endTagMatch = html.match(/\[end\](.*?)$/)
 		return endTagMatch ? endTagMatch[1] : ""
 	}
 
 	/**
-	 * Extracts the widths of the columns of a given block element
-	 * @param html the innerHTMl of the to-be-processed column block element
-	 * @returns a list with the width ratio of the respective columns
+	 * Extract the widths of the columns of a given block element
+	 * @param html innerText of the to-be-processed column block element
+	 * @returns list with the width ratio of the respective columns
 	 */
 	getBlockWidths(html: string): string[] {
-		const regex = /<p>\[(begin|col)\](.*?)<\/p>/g
+		const regex = /\[(begin|col)\](.*?)$/g
 		const result: string[] = []
 		let match: RegExpExecArray | null
 
@@ -81,9 +102,9 @@ export default class SimpleColumns extends Plugin {
 	}
 
 	/**
-	 * Decides how to manipulate the current element based on its content
+	 * Decide how to manipulate the current element based on its content
 	 * @param text the innerText of the current element
-	 * @returns an enum member telling how to process this element
+	 * @returns enum member telling how to process this element
 	 */
 	getElementAction(text: string): ElementAction {
 		let hasBeginTag = false, hasEndTag = false
@@ -111,15 +132,48 @@ export default class SimpleColumns extends Plugin {
 		return ElementAction.Skip
 	}
 
+	/**
+	 * Split up paragraph children line-by-line by removing `<br>` elements.
+     * Consider it like turning `<p>foo<br>bar</p>` into `<p>foo</p><p>bar</p>`.
+	 * @param el original element of a document snippet
+	 */
+	removeBreaks(el: HTMLElement) {
+        for (const p of Array.from(el.querySelectorAll("p"))) {
+            const parts: Node[][] = []
+            let cur: Node[] = []
+
+            for (const child of Array.from(p.childNodes)) {
+                if (child.nodeName == "BR") {
+                    parts.push(cur)
+                    cur = []
+                } else {
+                    cur.push(child)
+                }
+            }
+            parts.push(cur)
+
+            if (parts.length === 1) continue // Nothing to split
+
+            const newParagraphs = parts.map(nodes => {
+                const newP = document.createElement("p")
+                for (const node of nodes) newP.prepend(node)
+                return newP
+            })
+
+            for (const newP of newParagraphs) p.prepend(newP)
+            p.remove()
+        }
+    }
+
 	async onload() {
 		await this.loadSettings()
 
 		this.addSettingTab(new SimpleColumnsSettingTab(this))
 
-		// A variable storing the content of previously processed element
-		let prevEl = { innerHTML: "" } as HTMLElement
+		// Variable storing the content of previously processed element
+        let prevEls: HTMLElement[] = []
 
-		// Rerenders the Reading View each time you change the view
+		// Rerender reading view each time you change the view
 		this.registerEvent(this.app.workspace.on("layout-change", () => {
 			this.app.workspace
 				.getActiveViewOfType(MarkdownView)?.previewMode
@@ -131,29 +185,28 @@ export default class SimpleColumns extends Plugin {
 		// callback, `el` refers to the HTMLElement object of one fragment. Thus, the
 		// callback runs multiple times for every fragment of the note.
 		this.registerMarkdownPostProcessor(el => {
-			// Merges the content of the previous element with the current one
-			el.innerHTML = `${prevEl.innerHTML}\n${el.innerHTML}`
-			prevEl.innerHTML = ""
+			// Merge the content of the previous element with the current one
+            for (const pel of prevEls) el.prepend(pel)
+			prevEls = []
 
 			switch (this.getElementAction(el.innerText)) {
 				case ElementAction.Move:
-					prevEl = el
+                    prevEls.push(el)
 					break
 				case ElementAction.Render:
-					const config = this.getBlockConfig(el.innerHTML)
+					const config = this.getBlockConfig(el.innerText)
 
 					if (Platform.isDesktop || this.settings.renderOnMobile) {
 						el.addClass("osc-parent")
 
-						// Applies rtl setting
-						if (
-							!config.contains("ltr")
-							&& (this.settings.rtlByDefault || config.contains("rtl"))
-						) el.addClass("osc-parent-rtl")
+						// Apply rtl setting
+						if (!config.contains("ltr") &&
+                            (this.settings.rtlByDefault || config.contains("rtl")))
+                            el.addClass("osc-parent-rtl")
 					}
 
 					// Part where the rendered document gets changed
-					el.innerHTML = this.getBlockColumns(el.innerHTML, config)
+					this.getBlockColumns(el, config)
 					break
 				case ElementAction.Skip:
 					break
@@ -161,7 +214,7 @@ export default class SimpleColumns extends Plugin {
 		})
 	}
 	
-	// Rerenders the Reading View again after disabling plugin
+	// Rerender reading view again after disabling plugin
 	onunload() {
 		this.app.workspace
 			.getActiveViewOfType(MarkdownView)?.previewMode
